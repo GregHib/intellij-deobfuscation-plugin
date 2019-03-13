@@ -1,0 +1,27 @@
+<idea-plugin>
+    <id>world.gregs.intellij.plugins.deobfuscation</id>
+    <name>Java Bitwise Deobsfuscator</name>
+    <vendor email="greg@gregs.world" url="http://gregs.world">Greg</vendor>
+
+    <description><![CDATA[
+    Highlights pointless bitwise comparator obfuscation to be simplified<br>
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <localInspection groupPath="Java" language="JAVA" shortName="PointlessBitwiseComparator" bundle="world.gregs.intellij.plugins.DeobfuscateToolBundle"
+                         key="pointless.bitwise.comparator.display.name" groupBundle="messages.InspectionsBundle"
+                         groupKey="group.names.bitwise.operation.issues" enabledByDefault="true" level="WARNING"
+                         hasStaticDescription="true"
+                         implementationClass="world.gregs.intellij.plugins.bitwise.PointlessBitwiseComparatorInspection"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>
