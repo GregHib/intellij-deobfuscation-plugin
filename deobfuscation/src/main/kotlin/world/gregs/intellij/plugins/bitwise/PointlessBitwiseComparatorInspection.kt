@@ -48,8 +48,9 @@ class PointlessBitwiseComparatorInspection : BaseInspection() {
                 return "$rOperand ${getToken(tokenType)} $lOperand"
             }
         } else if(isBitwiseOperator(left) && isNumber(right) || isNumber(left) && isBitwiseOperator(right)) {
-            val number = JavaPsiMathUtil.getNumberFromLiteral(if(isNumber(right)) right else left)
-            val operand = getBitwiseOperandText(if(isBitwiseOperator(left)) left else right)
+            val flip = isNumber(left) && isBitwiseOperator(right)
+            val number = JavaPsiMathUtil.getNumberFromLiteral(if(flip) left else right)
+            val operand = getBitwiseOperandText(if(flip) right else left)
             if(number != null && operand != null) {
                 val inverseToken = when(tokenType) {
                     GT -> LT
@@ -58,7 +59,7 @@ class PointlessBitwiseComparatorInspection : BaseInspection() {
                     LE -> GE
                     else -> tokenType
                 }
-                return "$operand ${getToken(inverseToken)} ${decrementReverseValue(number)}"
+                return "$operand ${getToken(if(flip) tokenType else inverseToken)} ${decrementReverseValue(number)}"
             }
         } else {
             throw IllegalStateException("Didn't expect to see you here.")

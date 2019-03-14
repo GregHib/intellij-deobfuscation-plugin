@@ -12,11 +12,11 @@ class PointlessBitwiseComparator {
     }
 
     public void bitwiseLessThanReversed() {
-        boolean result = <warning descr="'-32768 < (first ^ 0xffffffff)' can be replaced with 'first > 32767'">-32768 < (first ^ 0xffffffff)</warning>;
+        boolean result = <warning descr="'-32768 < (first ^ 0xffffffff)' can be replaced with 'first < 32767'">-32768 < (first ^ 0xffffffff)</warning>;
     }
 
     public void bitwiseLessThanOperandReversed() {
-        boolean result = <warning descr="'-32768 < (0xffffffff ^ first)' can be replaced with 'first > 32767'">-32768 < (0xffffffff ^ first)</warning>;
+        boolean result = <warning descr="'-32768 < (0xffffffff ^ first)' can be replaced with 'first < 32767'">-32768 < (0xffffffff ^ first)</warning>;
     }
 
     public void bitwiseLessThanBitwise() {
@@ -35,8 +35,12 @@ class PointlessBitwiseComparator {
         boolean result = <warning descr="'(first ^ 0xffffffff) > -1' can be replaced with 'first < 0'">(first ^ 0xffffffff) > -1</warning>;
     }
 
+    public void bitwiseGreaterThanReversed() {
+        boolean result = <warning descr="'-1 > (first ^ 0xffffffff)' can be replaced with 'first > 0'">-1 > (first ^ 0xffffffff)</warning>;
+    }
+
     public void bitwiseLessThanEqual() {
-        boolean result = <warning descr="'-1 <= (first ^ 0xffffffff)' can be replaced with 'first >= 0'">-1 <= (first ^ 0xffffffff)</warning>;
+        boolean result = <warning descr="'-1 <= (first ^ 0xffffffff)' can be replaced with 'first <= 0'">-1 <= (first ^ 0xffffffff)</warning>;
     }
 
     public void bitwiseGreaterThanEqual() {

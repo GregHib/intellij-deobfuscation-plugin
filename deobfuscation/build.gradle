@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'world.gregs.intellij.plugins'
-version '1.0'
+version '1.0.1'
 
 repositories {
     mavenCentral()
@@ -25,6 +25,6 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+      Stopped reversing comparator if expressions are flipped.<br>
+      """
 }
