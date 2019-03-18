@@ -15,6 +15,7 @@ import com.siyeh.ig.psiutils.CommentTracker
 import com.siyeh.ig.psiutils.JavaPsiMathUtil
 import org.jetbrains.annotations.NonNls
 import world.gregs.intellij.plugins.DeobfuscateToolBundle
+import world.gregs.intellij.plugins.DeobfuscateUtil.isNumber
 
 class PointlessBitwiseComparatorInspection : BaseInspection() {
 
@@ -152,10 +153,6 @@ class PointlessBitwiseComparatorInspection : BaseInspection() {
 
         private fun isHex(expression: PsiExpression?): Boolean {
             return expression != null && (expression.type == PsiType.INT && expression.text == "0xffffffff" || expression.type == PsiType.LONG && expression.text == "0xffffffffffffffffL")
-        }
-
-        private fun isNumber(expression: PsiExpression): Boolean {
-            return JavaPsiMathUtil.getNumberFromLiteral(expression) != null
         }
 
         private fun isBitwiseOperator(expression: PsiExpression?): Boolean {

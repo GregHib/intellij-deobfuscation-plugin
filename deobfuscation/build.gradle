@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'world.gregs.intellij.plugins'
-version '1.0.1'
+version '1.1.0'
 
 repositories {
     mavenCentral()
@@ -20,11 +20,20 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+processResources {
+    from('src/inspectionDescriptions/') {
+        into 'inspectionDescriptions'
+    }
+}
+
 intellij {
     version '2018.3.5'
 }
 patchPluginXml {
     changeNotes """
-      Stopped reversing comparator if expressions are flipped.<br>
+        Inspections added:<br>
+        Inverse else comparator<br>
+        Inline nested else statments<br>
       """
 }
