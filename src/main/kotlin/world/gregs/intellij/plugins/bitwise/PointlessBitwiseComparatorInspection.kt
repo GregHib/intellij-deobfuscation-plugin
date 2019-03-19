@@ -4,7 +4,6 @@ import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.*
 import com.intellij.psi.JavaTokenType.*
-import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiUtil
 import com.intellij.psi.util.PsiUtilCore
 import com.intellij.util.containers.ContainerUtil
@@ -12,6 +11,7 @@ import com.siyeh.ig.BaseInspection
 import com.siyeh.ig.BaseInspectionVisitor
 import com.siyeh.ig.InspectionGadgetsFix
 import com.siyeh.ig.psiutils.CommentTracker
+import com.siyeh.ig.psiutils.ComparisonUtils
 import com.siyeh.ig.psiutils.JavaPsiMathUtil
 import org.jetbrains.annotations.NonNls
 import world.gregs.intellij.plugins.DeobfuscateToolBundle
@@ -38,29 +38,28 @@ class PointlessBitwiseComparatorInspection : BaseInspection() {
         if (expression !is PsiBinaryExpression) {
             return ""
         }
-        val tokenType = expression.operationTokenType
+        val operator = expression.operationSign
         val left = expression.lOperand
         val right = expression.rOperand ?: return ""
 
-        if(isBitwiseOperator(left) && isBitwiseOperator(right)) {
-            val lOperand = getBitwiseOperandText(left)
-            val rOperand = getBitwiseOperandText(right)
-            if(lOperand != null && rOperand != null) {
-                return "$rOperand ${getToken(tokenType)} $lOperand"
+        val ct = CommentTracker()
+
+        if (isBitwiseOperator(left) && isBitwiseOperator(right)) {
+            val lOperand = getOperandText(left, ct)
+            val rOperand = getOperandText(right, ct)
+            if (lOperand != null && rOperand != null) {
+                return "$rOperand ${ct.text(operator)} $lOperand"
             }
-        } else if(isBitwiseOperator(left) && isNumber(right) || isNumber(left) && isBitwiseOperator(right)) {
+        } else if (isBitwiseOperator(left) && isNumber(right) || isNumber(left) && isBitwiseOperator(right)) {
             val flip = isNumber(left) && isBitwiseOperator(right)
-            val number = JavaPsiMathUtil.getNumberFromLiteral(if(flip) left else right)
-            val operand = getBitwiseOperandText(if(flip) right else left)
-            if(number != null && operand != null) {
-                val inverseToken = when(tokenType) {
-                    GT -> LT
-                    GE -> LE
-                    LT -> GT
-                    LE -> GE
-                    else -> tokenType
+            val number = JavaPsiMathUtil.getNumberFromLiteral(if (flip) left else right)
+            val operand = getOperandText(if (flip) right else left, ct)
+            if (number != null && operand != null) {
+                val flipped = when (operator.tokenType) {
+                    GT, GE, LT, LE -> ComparisonUtils.getFlippedComparison(operator.tokenType)
+                    else -> ct.text(operator)
                 }
-                return "$operand ${getToken(if(flip) tokenType else inverseToken)} ${decrementReverseValue(number)}"
+                return "$operand ${if (flip) ct.text(operator) else flipped} ${decrementReverseValue(number)}"
             }
         } else {
             throw IllegalStateException("Didn't expect to see you here.")
@@ -69,61 +68,59 @@ class PointlessBitwiseComparatorInspection : BaseInspection() {
     }
 
     override fun buildVisitor(): BaseInspectionVisitor {
-        return PointlessBitwiseVisitor()
+        return object : BaseInspectionVisitor() {
+
+            override fun visitPolyadicExpression(expression: PsiPolyadicExpression) {
+                super.visitPolyadicExpression(expression)
+                val sign = expression.operationTokenType
+
+                if (!comparisonTokens.contains(sign)) {
+                    return
+                }
+
+                if (PsiUtilCore.hasErrorElementChild(expression)) {
+                    return
+                }
+
+                val operands = expression.operands
+                val parenthesized = operands.filter { it is PsiParenthesizedExpression || it is PsiPrefixExpression }
+
+                //Must have at least one bitwise operator
+                val bitwise = parenthesized.any { isBitwiseOperator(it) }
+                if (!bitwise) {
+                    return
+                }
+
+                //Either two bitwise or a bitwise and a number
+                val bitwiseCount = parenthesized.count { isBitwiseOperator(it) }
+                if (bitwiseCount != 2) {
+                    val number = operands.any { isNumber(it) }
+
+                    if (!number) {
+                        return
+                    }
+                }
+
+                registerError(expression, expression)
+            }
+        }
     }
 
     public override fun buildFix(vararg infos: Any): InspectionGadgetsFix? {
-        return PointlessBitwiseFix()
-    }
+        return object : InspectionGadgetsFix() {
 
-    private inner class PointlessBitwiseFix : InspectionGadgetsFix() {
-
-        override fun getFamilyName(): String {
-            return DeobfuscateToolBundle.message("pointless.bitwise.comparator.simplify.quickfix")
-        }
-
-        public override fun doFix(project: Project, descriptor: ProblemDescriptor) {
-            val expression = descriptor.psiElement as PsiExpression
-            val ct = CommentTracker()
-            val newExpression = calculateReplacementExpression(expression)
-            if (!newExpression.isEmpty()) {
-                ct.replaceAndRestoreComments(expression, newExpression)
-            }
-        }
-    }
-
-    private inner class PointlessBitwiseVisitor : BaseInspectionVisitor() {
-
-        override fun visitPolyadicExpression(expression: PsiPolyadicExpression) {
-            super.visitPolyadicExpression(expression)
-            val sign = expression.operationTokenType
-
-            if (!comparisonTokens.contains(sign)) {
-                return
+            override fun getFamilyName(): String {
+                return DeobfuscateToolBundle.message("pointless.bitwise.comparator.simplify.quickfix")
             }
 
-            if (PsiUtilCore.hasErrorElementChild(expression)) {
-                return
-            }
-
-            val operands = expression.operands
-            val parenthesized = operands.filterIsInstance<PsiParenthesizedExpression>()
-            val bitwise = parenthesized.any { isBitwiseOperator(it.expression) }
-
-            if(!bitwise) {
-                return
-            }
-
-            val bitwiseCount = parenthesized.count { isBitwiseOperator(it.expression) }
-            if(bitwiseCount != 2) {
-                val number = operands.any { isNumber(it) }
-
-                if (!number) {
-                    return
+            public override fun doFix(project: Project, descriptor: ProblemDescriptor) {
+                val expression = descriptor.psiElement as PsiExpression
+                val ct = CommentTracker()
+                val newExpression = calculateReplacementExpression(expression)
+                if (!newExpression.isEmpty()) {
+                    ct.replaceAndRestoreComments(expression, newExpression)
                 }
             }
-
-            registerError(expression, expression)
         }
     }
 
@@ -139,49 +136,59 @@ class PointlessBitwiseComparatorInspection : BaseInspection() {
             }
         }
 
-        private fun getToken(type: IElementType): String {
-            return when(type) {
-                GT -> ">"
-                GE -> ">="
-                LT -> "<"
-                LE -> "<="
-                EQEQ -> "=="
-                NE -> "!="
-                else -> ""
-            }
-        }
-
         private fun isHex(expression: PsiExpression?): Boolean {
             return expression != null && (expression.type == PsiType.INT && expression.text == "0xffffffff" || expression.type == PsiType.LONG && expression.text == "0xffffffffffffffffL")
         }
 
-        private fun isBitwiseOperator(expression: PsiExpression?): Boolean {
-            val express = PsiUtil.skipParenthesizedExprDown(expression) as? PsiBinaryExpression ?: return false
-            val sign = express.operationTokenType
+        private fun isBitwiseOperator(express: PsiExpression?): Boolean {
+            val expression = if (express is PsiParenthesizedExpression) PsiUtil.skipParenthesizedExprDown(express) else express
+            when (expression) {
+                is PsiPrefixExpression -> {
+                    if (expression.operationTokenType == TILDE) {
+                        return true
+                    }
+                }
+                is PsiBinaryExpression -> {
+                    val sign = expression.operationTokenType
 
-            if(sign != XOR) {
-                return false
+                    if (sign != XOR) {
+                        return false
+                    }
+
+                    if (isHex(expression.lOperand) || isHex(expression.rOperand)) {
+                        return true
+                    }
+                }
             }
-
-            if(isHex(express.lOperand) || isHex(express.rOperand)) {
-                return true
-            }
-
             return false
         }
 
-        private fun getBitwiseOperandText(expression: PsiExpression): String? {
-            val express = PsiUtil.skipParenthesizedExprDown(expression) as? PsiBinaryExpression ?: return null
-            val op = when {
-                isHex(express.lOperand) -> express.rOperand
-                isHex(express.rOperand) -> express.lOperand
+        private fun getOperandText(expression: PsiExpression, ct: CommentTracker): String? {
+            val express = PsiUtil.skipParenthesizedExprDown(expression) ?: return null
+            val operand: PsiExpression? = when (express) {
+                is PsiPrefixExpression -> {
+                    var child = express.lastChild as? PsiExpression
+                    if (child is PsiParenthesizedExpression) {
+                        child = PsiUtil.skipParenthesizedExprDown(child)
+                    }
+                    PsiUtil.skipParenthesizedExprDown(child) ?: return null
+                }
+                is PsiBinaryExpression -> {
+                    when {
+                        isHex(express.lOperand) -> express.rOperand
+                        isHex(express.rOperand) -> express.lOperand
+                        else -> null
+                    }
+                }
                 else -> null
             }
-
-            return if(op is PsiPolyadicExpression && op.operationTokenType == AND) {
-                "(${op.text})"
+            //AND operators still require parentheses
+            return if (operand is PsiPolyadicExpression && operand.operationTokenType == AND) {
+                "(${ct.text(operand)})"
+            } else if (operand != null) {
+                ct.text(operand)
             } else {
-                op?.text
+                null
             }
         }
     }

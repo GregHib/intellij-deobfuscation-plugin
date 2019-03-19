@@ -35,7 +35,7 @@ class InlineNestedElseInspection : SingleStatementInBlockInspection() {
             override fun isApplicable(body: PsiStatement?): Boolean {
                 //If body is else branch of parent
                 val parent = body?.parent
-                if(body is PsiBlockStatement && parent is PsiIfStatement && parent.elseBranch == body) {
+                if (body is PsiBlockStatement && parent is PsiIfStatement && parent.elseBranch == body) {
                     val codeBlock = body.codeBlock
                     if (PsiUtilCore.hasErrorElementChild(codeBlock)) {
                         return false
@@ -85,11 +85,11 @@ class InlineNestedElseInspection : SingleStatementInBlockInspection() {
 
             override fun doFix(project: Project, descriptor: ProblemDescriptor) {
                 var statement = PsiTreeUtil.getNonStrictParentOfType(descriptor.startElement, PsiStatement::class.java)
-                    ?: return
+                        ?: return
 
                 if (statement is PsiBlockStatement) {
                     statement = PsiTreeUtil.getNonStrictParentOfType(statement.parent, PsiStatement::class.java)
-                        ?: return
+                            ?: return
                 }
 
                 val body = when (statement) {

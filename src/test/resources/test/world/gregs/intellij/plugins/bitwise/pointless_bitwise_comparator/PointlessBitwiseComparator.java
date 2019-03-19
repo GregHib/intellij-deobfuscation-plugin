@@ -47,16 +47,8 @@ class PointlessBitwiseComparator {
         boolean result = <warning descr="'(first ^ 0xffffffff) >= -221' can be replaced with 'first <= 220'">(first ^ 0xffffffff) >= -221</warning>;
     }
 
-    public void bitwiseNegative() {
-        boolean result = -(first ^ 0xffffffff) == -2;
-    }
-
     public void bitwiseNot() {
         boolean result = !(<warning descr="'(first ^ 0xffffffff) == -2' can be replaced with 'first == 1'">(first ^ 0xffffffff) == -2</warning>);
-    }
-
-    public void bitwiseOnes() {
-        boolean result = ~(first ^ 0xffffffff) == -2;
     }
 
     public void bitwiseAnd() {
@@ -65,14 +57,6 @@ class PointlessBitwiseComparator {
 
     public void bitwiseAndReversed() {
         boolean result = <warning descr="'(0xff & first ^ 0xffffffff) == -1' can be replaced with '(0xff & first) == 0'">(0xff & first ^ 0xffffffff) == -1</warning>;
-    }
-
-    public void bitwiseOr() {
-        boolean result = (first | 1 ^ 0xffffffff) == -1;
-    }
-
-    public void bitwiseOrReversed() {
-        boolean result = (1 | first ^ 0xffffffff) == -1;
     }
 
     public void bitwiseShiftLeft() {
@@ -145,14 +129,6 @@ class PointlessBitwiseComparator {
 
     public void bitwiseDecrementReversed() {
         boolean result = <warning descr="'(--first ^ 0xffffffff) == -1' can be replaced with '--first == 0'">(--first ^ 0xffffffff) == -1</warning>;
-    }
-
-    public void bitwiseMultiple() {
-        boolean result = <warning descr="'(1 + first + second + 1 ^ 0xffffffff) == -1' can be replaced with '1 + first + second + 1 == 0'">(1 + first + second + 1 ^ 0xffffffff) == -1</warning>;
-    }
-
-    public void bitwiseMultipleBitwise() {
-        boolean result = <warning descr="'((first << 6) / 2 ^ 0xffffffff) < (0xffffffff ^ second - 4)' can be replaced with 'second - 4 < (first << 6) / 2'">((first << 6) / 2 ^ 0xffffffff) < (0xffffffff ^ second - 4)</warning>;
     }
 
 }
