@@ -14,17 +14,20 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
-        <localInspection groupPath="Java" language="JAVA" shortName="PointlessBitwiseComparator" bundle="world.gregs.intellij.plugins.DeobfuscateToolBundle"
+        <localInspection groupPath="Java" language="JAVA" shortName="PointlessBitwiseComparator"
+                         bundle="world.gregs.intellij.plugins.DeobfuscateToolBundle"
                          key="pointless.bitwise.comparator.display.name" groupBundle="messages.InspectionsBundle"
                          groupKey="group.names.bitwise.operation.issues" enabledByDefault="true" level="WARNING"
                          hasStaticDescription="true"
                          implementationClass="world.gregs.intellij.plugins.bitwise.PointlessBitwiseComparatorInspection"/>
-        <localInspection groupPath="Java" language="JAVA" shortName="InverseElseComparator" bundle="world.gregs.intellij.plugins.DeobfuscateToolBundle"
+        <localInspection groupPath="Java" language="JAVA" shortName="InverseElseComparator"
+                         bundle="world.gregs.intellij.plugins.DeobfuscateToolBundle"
                          key="inverse.else.comparator.display.name" groupBundle="messages.InspectionsBundle"
                          groupKey="group.names.control.flow.issues" enabledByDefault="true" level="WARNING"
                          hasStaticDescription="true"
                          implementationClass="world.gregs.intellij.plugins.flow.InverseElseComparatorInspection"/>
-        <localInspection groupPath="Java" language="JAVA" shortName="InlineNestedElse" bundle="world.gregs.intellij.plugins.DeobfuscateToolBundle"
+        <localInspection groupPath="Java" language="JAVA" shortName="InlineNestedElse"
+                         bundle="world.gregs.intellij.plugins.DeobfuscateToolBundle"
                          key="inline.nested.else.display.name" groupBundle="messages.InspectionsBundle"
                          groupKey="group.names.control.flow.issues" enabledByDefault="true" level="WARNING"
                          hasStaticDescription="true"
@@ -32,6 +35,10 @@
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
+        <action id="world.gregs.intellij.plugins.flow.TestAction"
+                class="world.gregs.intellij.plugins.flow.TestAction" text="IntegerFlow"
+                description="Checks integer parameter for flow obfuscation">
+            <add-to-group group-id="RefactoringMenu4" anchor="last"/>
+        </action>
     </actions>
 </idea-plugin>
