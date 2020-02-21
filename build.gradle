@@ -34,7 +34,7 @@ intellij {
 patchPluginXml {
     changeNotes """
         Expanded inspection functionality:<br>
-        Tilde support fo r'pointless bitwise comparator'
+        Tilde support for 'pointless bitwise comparator'
         Negative boolean and method support for 'inverse else comparator'
         Multi-operand support for 'inverse else comparator'
         <br>
