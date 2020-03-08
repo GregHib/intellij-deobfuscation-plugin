@@ -30,6 +30,11 @@
                          groupKey="group.names.control.flow.issues" enabledByDefault="true" level="WARNING"
                          hasStaticDescription="true"
                          implementationClass="world.gregs.intellij.plugins.flow.InlineNestedElseInspection"/>
+        <localInspection groupPath="Java" language="JAVA" shortName="InlineExternalElseStatement" bundle="world.gregs.intellij.plugins.DeobfuscateToolBundle"
+                         key="inline.external.else.statement.display.name" groupBundle="messages.InspectionsBundle"
+                         groupKey="group.names.control.flow.issues" enabledByDefault="true" level="WARNING"
+                         hasStaticDescription="true"
+                         implementationClass="world.gregs.intellij.plugins.flow.InlineExternalElseStatementInspection"/>
     </extensions>
 
     <actions>
