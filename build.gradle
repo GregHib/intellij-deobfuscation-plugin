@@ -1,10 +1,10 @@
 plugins {
-    id 'org.jetbrains.intellij' version '0.4.7'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.21'
+    id 'org.jetbrains.intellij' version '0.4.16'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.61'
 }
 
 group 'world.gregs.intellij.plugins'
-version '1.2.1'
+version '1.2.2'
 
 repositories {
     mavenCentral()
@@ -28,7 +28,8 @@ processResources {
 }
 
 intellij {
-    version '2019.1'
+    version '2019.3'
+    plugins 'java'
 }
 patchPluginXml {
     changeNotes """
@@ -40,6 +41,6 @@ patchPluginXml {
         Added additional highlighting tests<br>
         Added fix tests<br>
         <br>
-        Updated to support 2019.1
+        Updated to support 2019.3
       """
 }
