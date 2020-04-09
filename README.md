@@ -12,14 +12,10 @@ Tools to support de-obfuscated code refactoring
 | Inverse Else Comparator | Reverses negative if else statements | `if (i != 1) {` | `if (i == 1) {` |
 | Inline Nested Else | Inlines else blocks containing if statements | `else { if(...) {` | `else if(...) {` |
 
-## Setup -  Install plugin from disk
-Taken from jetbrains managing-plugins guide
-[https://www.jetbrains.com/help/idea/managing-plugins.html](https://www.jetbrains.com/help/idea/managing-plugins.html)
+## Setup
+This plugin can now be found on the [Jetbrains Plugin Repository](https://plugins.jetbrains.com/plugin/14101-greg-s-deobsfuscation-tools)!
 
-1.  In the **Settings/Preferences** dialog (Ctrl+Alt+S), select **Plugins**.
-2.  In the **Plugins** dialog, click  ![The cogwheel icon](https://www.jetbrains.com/help/img/idea/2018.3/artwork.studio.icons.logcat.toolbar.settings@2x.png)  and then click **Install Plugin from Disk**.
-3.  Select the plugin archive file and click **OK**.
-4.  Click **OK** to apply the changes and restart the IDE if prompted.
+See [Managing Plugins](https://www.jetbrains.com/help/idea/managing-plugins.html) for further setup instructions.
 
 ## Usage
 
