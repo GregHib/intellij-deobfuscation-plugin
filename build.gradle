@@ -28,6 +28,7 @@ processResources {
 }
 
 intellij {
+    updateSinceUntilBuild false
     version '2020.1'
     plugins 'java'
 }
