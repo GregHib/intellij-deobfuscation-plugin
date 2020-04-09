@@ -1,6 +1,6 @@
 package world.gregs.intellij.plugins
 
-import com.intellij.CommonBundle
+import com.intellij.AbstractBundle
 import org.jetbrains.annotations.NonNls
 import org.jetbrains.annotations.PropertyKey
 import java.lang.ref.Reference
@@ -24,6 +24,6 @@ object DeobfuscateToolBundle {
         }
 
     fun message(@PropertyKey(resourceBundle = BUNDLE) key: String, vararg params: Any): String {
-        return CommonBundle.message(bundle, key, *params)
+        return AbstractBundle.message(bundle, key, *params)
     }
 }
