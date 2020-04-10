@@ -1,11 +1,9 @@
 <idea-plugin>
     <id>world.gregs.intellij.plugins.deobfuscation</id>
     <name>Greg's Deobsfuscation Tools</name>
-    <vendor email="greg@gregs.world" url="http://gregs.world">Greg</vendor>
+    <vendor email="greg@greghibberd.com" url="http://greghibberd.com">Greg</vendor>
 
-    <description><![CDATA[
-    A few intellij plugins to assist refactoring obfuscated code<br>
-    ]]></description>
+    <description>A few intellij plugins to assist refactoring obfuscated code</description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
@@ -13,6 +11,8 @@
     <depends>com.intellij.modules.lang</depends>
     -->
     <idea-version since-build="184" until-build="201.*"/>
+
+    <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <localInspection groupPath="Java" language="JAVA" shortName="PointlessBitwiseComparator" bundle="world.gregs.intellij.plugins.DeobfuscateToolBundle"
