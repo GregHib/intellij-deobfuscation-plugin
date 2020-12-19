@@ -23,7 +23,7 @@ internal class InverseElseComparatorFixTest : LightQuickFixTester() {
         doTest()
     }
 
-    override fun getInspection(): BaseInspection? {
+    override fun getInspection(): BaseInspection {
         return InverseElseComparatorInspection()
     }
 }

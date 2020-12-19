@@ -28,7 +28,7 @@ internal class PointlessBitwiseComparatorFixTest : LightQuickFixTester() {
         doTest()
     }
 
-    override fun getInspection(): BaseInspection? {
+    override fun getInspection(): BaseInspection {
         return PointlessBitwiseComparatorInspection()
     }
 

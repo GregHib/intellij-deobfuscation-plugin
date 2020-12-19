@@ -9,7 +9,7 @@ internal class InlineNestedElseInspectionTest : LightInspectionTester() {
         doTest()
     }
 
-    override fun getInspection(): BaseInspection? {
+    override fun getInspection(): BaseInspection {
         return InlineNestedElseInspection()
     }
 }

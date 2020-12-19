@@ -19,7 +19,7 @@ internal class InlineNestedElseFixTest : LightQuickFixTester() {
         doTest()
     }
 
-    override fun getInspection(): BaseInspection? {
+    override fun getInspection(): BaseInspection {
         return InlineNestedElseInspection()
     }
 }

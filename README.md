@@ -25,7 +25,7 @@ If code in your project code matches one of the tools it will be highlighted
 
 Open the intention actions and quick-fixes menu by pressing the light bulb icon next to the highlighted code (Alt + Enter)
 
-The intention menu can be used to apply a single quick-fix or by pressing the right arrow key additional options can be selected such as fixing all in file, module or project.
+The intention menu can be used to apply a single quick-fix or by pressing the right arrow key additional options can be selected such as fixing all in a file, module or project.
 
 ### Search
 Inspections can also be ran by name
