@@ -1,8 +1,4 @@
-# Intellij Plugins
-
-Plugins made for the jetbrains intellij platform.
-
-## Deobfuscation
+# Intellij Deobfuscation Plugins
 
 Tools to support de-obfuscated code refactoring
 
@@ -10,7 +6,8 @@ Tools to support de-obfuscated code refactoring
 |--|--|--|--|
 | Pointless Bitwise Comparator | Simplifies bitwise comparators | `(i ^ 0xffffffff) <= -1` | | `i >= 0` |
 | Inverse Else Comparator | Reverses negative if else statements | `if (i != 1) {` | `if (i == 1) {` |
-| Inline Nested Else | Inlines else blocks containing if statements | `else { if(...) {` | `else if(...) {` |
+| Inline Nested Else | Inlines else blocks containing if statements | `else { if (...) {` | `else if (...) {` |
+| Pointless Do-while Loop | Inlines false do-while loops  | `do { if (...) {} } while(false);` | `if (...) {}` |
 
 ## Setup
 This plugin can now be found on the [Jetbrains Plugin Repository](https://plugins.jetbrains.com/plugin/14101-greg-s-deobsfuscation-tools)!
@@ -28,6 +25,6 @@ Open the intention actions and quick-fixes menu by pressing the light bulb icon 
 The intention menu can be used to apply a single quick-fix or by pressing the right arrow key additional options can be selected such as fixing all in a file, module or project.
 
 ### Search
-Inspections can also be ran by name
+Inspections can also be run by name
 
 `Analyze -> Run inspection by name` (Ctrl + Shift + Alt + I)

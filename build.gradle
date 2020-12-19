@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'world.gregs.intellij.plugins'
-version '1.2.4'
+version '1.2.5'
 
 repositories {
     mavenCentral()
@@ -35,5 +35,6 @@ intellij {
 patchPluginXml {
     changeNotes """
         Updated to support 2020.3
+        Added unfolding pointless do-while loops
       """
 }
