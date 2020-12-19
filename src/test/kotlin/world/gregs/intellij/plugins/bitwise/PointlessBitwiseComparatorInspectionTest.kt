@@ -41,7 +41,7 @@ internal class PointlessBitwiseComparatorInspectionTest : LightInspectionTester(
         doTest()
     }
 
-    override fun getInspection(): BaseInspection? {
+    override fun getInspection(): BaseInspection {
         return PointlessBitwiseComparatorInspection()
     }
 }

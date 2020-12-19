@@ -69,7 +69,7 @@ class InlineNestedElseInspection : SingleStatementInBlockInspection() {
         }
     }
 
-    override fun buildFix(vararg infos: Any?): InspectionGadgetsFix? {
+    override fun buildFix(vararg infos: Any?): InspectionGadgetsFix {
         return object : InspectionGadgetsFix() {
             @Nls
             @NotNull

@@ -65,8 +65,7 @@ class InverseElseComparatorInspection : BaseInspection() {
                                     ?: return
 
                             //Check both operands are binary expressions that have a range operation type
-                            val sign = expression.operationTokenType
-                            val valid = when (sign) {
+                            val valid = when (expression.operationTokenType) {
                                 //Single operand
                                 NE -> true
                                 //Both operands are binary expressions that have a range operation type
@@ -101,7 +100,7 @@ class InverseElseComparatorInspection : BaseInspection() {
         }
     }
 
-    public override fun buildFix(vararg infos: Any): InspectionGadgetsFix? {
+    public override fun buildFix(vararg infos: Any): InspectionGadgetsFix {
         return object : InspectionGadgetsFix() {
 
             override fun getFamilyName(): String {
@@ -140,8 +139,7 @@ class InverseElseComparatorInspection : BaseInspection() {
 
     @NonNls
     internal fun calculateReplacementExpression(statement: PsiIfStatement, ct: CommentTracker): String {
-        val expression = statement.condition
-        return when (expression) {
+        return when (val expression = statement.condition) {
             is PsiPrefixExpression -> {
                 var child = expression.lastChild
                 if (child is PsiParenthesizedExpression) {
@@ -152,8 +150,7 @@ class InverseElseComparatorInspection : BaseInspection() {
             is PsiPolyadicExpression -> {
                 //If binary check single & range
                 if (expression is PsiBinaryExpression) {
-                    val sign = expression.operationTokenType
-                    when (sign) {
+                    when (val sign = expression.operationTokenType) {
                         NE -> return replaceOperation(expression, ComparisonUtils.getNegatedComparison(sign), ct)
                         OROR -> {
                             //Get operands as expressions

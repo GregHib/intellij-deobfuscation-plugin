@@ -21,7 +21,7 @@ internal class InverseElseComparatorInspectionTest : LightInspectionTester() {
         doTest()
     }
 
-    override fun getInspection(): BaseInspection? {
+    override fun getInspection(): BaseInspection {
         return InverseElseComparatorInspection()
     }
 }
