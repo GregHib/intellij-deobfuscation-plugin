@@ -106,7 +106,7 @@ class PointlessBitwiseComparatorInspection : BaseInspection() {
         }
     }
 
-    public override fun buildFix(vararg infos: Any): InspectionGadgetsFix? {
+    public override fun buildFix(vararg infos: Any): InspectionGadgetsFix {
         return object : InspectionGadgetsFix() {
 
             override fun getFamilyName(): String {
@@ -117,7 +117,7 @@ class PointlessBitwiseComparatorInspection : BaseInspection() {
                 val expression = descriptor.psiElement as PsiExpression
                 val ct = CommentTracker()
                 val newExpression = calculateReplacementExpression(expression)
-                if (!newExpression.isEmpty()) {
+                if (newExpression.isNotEmpty()) {
                     ct.replaceAndRestoreComments(expression, newExpression)
                 }
             }
@@ -141,8 +141,7 @@ class PointlessBitwiseComparatorInspection : BaseInspection() {
         }
 
         private fun isBitwiseOperator(express: PsiExpression?): Boolean {
-            val expression = if (express is PsiParenthesizedExpression) PsiUtil.skipParenthesizedExprDown(express) else express
-            when (expression) {
+            when (val expression = if (express is PsiParenthesizedExpression) PsiUtil.skipParenthesizedExprDown(express) else express) {
                 is PsiPrefixExpression -> {
                     if (expression.operationTokenType == TILDE) {
                         return true

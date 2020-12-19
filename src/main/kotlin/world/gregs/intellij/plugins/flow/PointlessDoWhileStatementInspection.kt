@@ -5,12 +5,10 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Pair
 import com.intellij.psi.*
 import com.intellij.psi.PsiKeyword.FALSE
-import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
 import com.siyeh.ig.BaseInspectionVisitor
 import com.siyeh.ig.InspectionGadgetsFix
 import com.siyeh.ig.PsiReplacementUtil
-import com.siyeh.ig.psiutils.CommentTracker
 import com.siyeh.ig.style.ControlFlowStatementVisitorBase
 import com.siyeh.ig.style.SingleStatementInBlockInspection
 import org.jetbrains.annotations.Nls

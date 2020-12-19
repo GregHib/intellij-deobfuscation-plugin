@@ -9,7 +9,7 @@ internal class PointlessDoWhileStatementInspectionTest : LightInspectionTester()
         doTest()
     }
 
-    override fun getInspection(): BaseInspection? {
+    override fun getInspection(): BaseInspection {
         return PointlessDoWhileStatementInspection()
     }
 }
