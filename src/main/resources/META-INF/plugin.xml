@@ -10,7 +10,7 @@
     <!-- uncomment to enable plugin in all products
     <depends>com.intellij.modules.lang</depends>
     -->
-    <idea-version since-build="184" until-build="201.*"/>
+    <idea-version since-build="184" until-build="203.*"/>
 
     <depends>com.intellij.modules.java</depends>
 

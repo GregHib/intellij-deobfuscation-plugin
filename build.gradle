@@ -29,11 +29,11 @@ processResources {
 
 intellij {
     updateSinceUntilBuild false
-    version '2020.1'
+    version '2020.3'
     plugins 'java'
 }
 patchPluginXml {
     changeNotes """
-        Updated to support 2020.1
+        Updated to support 2020.3
       """
 }
