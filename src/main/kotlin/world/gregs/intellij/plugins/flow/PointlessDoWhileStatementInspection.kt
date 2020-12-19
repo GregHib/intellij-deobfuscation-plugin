@@ -5,12 +5,10 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Pair
 import com.intellij.psi.*
 import com.intellij.psi.PsiKeyword.FALSE
-import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
 import com.siyeh.ig.BaseInspectionVisitor
 import com.siyeh.ig.InspectionGadgetsFix
 import com.siyeh.ig.PsiReplacementUtil
-import com.siyeh.ig.psiutils.CommentTracker
 import com.siyeh.ig.style.ControlFlowStatementVisitorBase
 import com.siyeh.ig.style.SingleStatementInBlockInspection
 import org.jetbrains.annotations.Nls
@@ -44,6 +42,7 @@ class PointlessDoWhileStatementInspection : SingleStatementInBlockInspection() {
 
             override fun visitDoWhileStatement(statement: PsiDoWhileStatement) {
                 super.visitDoWhileStatement(statement)
+                // TODO don't highlight if loop contents isn't an if-statement and has a block after it.
                 if (statement.parent !is PsiLabeledStatement && statement.isPointless() && !isNested(statement)) {
                     registerStatementError(statement)
                 }
@@ -99,11 +98,11 @@ class PointlessDoWhileStatementInspection : SingleStatementInBlockInspection() {
             }
         }
 
-        fun fix(statement: PsiDoWhileStatement, factory: PsiElementFactory) {
+        fun fix(statement: PsiDoWhileStatement, factory: PsiElementFactory): Boolean {
             val label = (statement.parent as? PsiLabeledStatement)?.labelIdentifier
-            val contents = statement.children.first { it is PsiBlockStatement }
+            val contents = statement.children.firstOrNull { it is PsiBlockStatement } ?: return false
             val code = contents.firstChild as PsiCodeBlock
-            val ifStatement = code.children.first { it is PsiIfStatement } as PsiIfStatement
+            val ifStatement = code.children.firstOrNull { it is PsiIfStatement } as? PsiIfStatement ?: return false
             val list = mutableListOf<PsiBreakStatement>()
             recursive(statement, list)
 
@@ -137,7 +136,7 @@ class PointlessDoWhileStatementInspection : SingleStatementInBlockInspection() {
 
             val root = if (label != null) statement.parent as PsiLabeledStatement else statement
             // Replace do while with contents of if statement combined into if else
-            if (ifStatement.children.any { it is PsiKeyword && it.text == "else" }) {
+            if (hasElseStatement(ifStatement)) { // FIXME
                 PsiReplacementUtil.replaceStatement(root, ifStatement.text)
             } else {
                 val afterIfStatement = code.children.copyOfRange(code.children.indexOf(ifStatement) + 1, code.children.size - 2)// brace + whitespace
@@ -154,6 +153,19 @@ class PointlessDoWhileStatementInspection : SingleStatementInBlockInspection() {
                     PsiReplacementUtil.replaceStatement(root, ifStatement.text)
                 }
             }
+            return true
+        }
+
+        private fun hasElseStatement(ifStatement: PsiIfStatement): Boolean {
+            val children = ifStatement.children
+            for (i in children.indices) {
+                val child = children[i]
+                if (child is PsiKeyword && child.text == "else") {
+                    println("Check ${ifStatement.text} ${children.toList()}")
+                    return children.getOrNull(i + 2) is PsiBlockStatement
+                }
+            }
+            return false
         }
 
         override fun doFix(project: Project, descriptor: ProblemDescriptor) {
@@ -168,8 +180,11 @@ class PointlessDoWhileStatementInspection : SingleStatementInBlockInspection() {
 
             val factory = PsiElementFactory.getInstance(project)
             for (s in list.reversed()) {
-                fix(s, factory)
+                if (!fix(s, factory)) {
+                    break
+                }
             }
+            println("Done")
 //            CodeStyleManager.getInstance(project).reformat(if(labeled) statement.parent else statement)
         }
     }
