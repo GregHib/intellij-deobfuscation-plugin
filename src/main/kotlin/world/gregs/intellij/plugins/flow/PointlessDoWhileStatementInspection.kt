@@ -128,6 +128,7 @@ class PointlessDoWhileStatementInspection : SingleStatementInBlockInspection() {
                     b.delete()
                 }
             } else if (!nested) {
+                // FIXME we can't assume this, we need to wrap them all in if else statements.
                 // We're going to assume we can remove all the top most breaks without causing any issues.
                 breaks.forEach {
                     it.delete()
@@ -161,7 +162,6 @@ class PointlessDoWhileStatementInspection : SingleStatementInBlockInspection() {
             for (i in children.indices) {
                 val child = children[i]
                 if (child is PsiKeyword && child.text == "else") {
-                    println("Check ${ifStatement.text} ${children.toList()}")
                     return children.getOrNull(i + 2) is PsiBlockStatement
                 }
             }
@@ -184,7 +184,6 @@ class PointlessDoWhileStatementInspection : SingleStatementInBlockInspection() {
                     break
                 }
             }
-            println("Done")
 //            CodeStyleManager.getInstance(project).reformat(if(labeled) statement.parent else statement)
         }
     }

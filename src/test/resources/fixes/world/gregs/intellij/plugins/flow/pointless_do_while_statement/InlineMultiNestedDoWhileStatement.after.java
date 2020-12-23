@@ -44,6 +44,7 @@ class Comparator {
                         return true;
                     }
                 }
+                // FIXME - Wrong
                 if (method4()) {
                     fifth = third;
                     fourth = second;
