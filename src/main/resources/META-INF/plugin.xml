@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>world.gregs.intellij.plugins.deobfuscation</id>
     <name>Greg's Deobsfuscation Tools</name>
-    <vendor email="greg@greghibberd.com" url="http://greghibberd.com">Greg</vendor>
+    <vendor email="greg@gregs.world" url="https://gregs.world">Greg</vendor>
 
     <description>A few intellij plugins to assist refactoring obfuscated code</description>
 
@@ -10,7 +10,7 @@
     <!-- uncomment to enable plugin in all products
     <depends>com.intellij.modules.lang</depends>
     -->
-    <idea-version since-build="203" until-build="203.*"/>
+    <idea-version since-build="203"/>
 
     <depends>com.intellij.modules.java</depends>
 
