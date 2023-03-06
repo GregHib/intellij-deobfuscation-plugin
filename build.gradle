@@ -1,6 +1,6 @@
 plugins {
-    id 'org.jetbrains.intellij' version '0.6.5'
-    id 'org.jetbrains.kotlin.jvm' version '1.4.20'
+    id 'org.jetbrains.intellij' version '1.13.1'
+    id 'org.jetbrains.kotlin.jvm' version '1.8.10'
 }
 
 group 'world.gregs.intellij.plugins'
@@ -12,13 +12,15 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    runtimeOnly 'org.jetbrains.kotlin:kotlin-reflect:1.8.10'
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_11
 }
+
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_11
 }
 
 processResources {
@@ -28,12 +30,14 @@ processResources {
 }
 
 intellij {
-    updateSinceUntilBuild false
-    version '2021.1'
-    plugins 'java'
+    updateSinceUntilBuild = false
+    version = "2021.1"
+    type = "IC"
+    plugins = ["java"]
 }
+
 patchPluginXml {
-    changeNotes """
+    changeNotes = """
         Updated to support 2021.1 and future versions
       """
 }

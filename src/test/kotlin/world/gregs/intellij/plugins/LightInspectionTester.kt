@@ -4,7 +4,6 @@ import com.intellij.codeHighlighting.HighlightDisplayLevel
 import com.intellij.codeInsight.daemon.HighlightDisplayKey
 import com.intellij.profile.codeInspection.ProjectInspectionProfileManager
 import com.intellij.testFramework.UsefulTestCase
-import com.siyeh.ig.LightInspectionTestCase
 import org.intellij.lang.annotations.Language
 import org.junit.Assert
 
