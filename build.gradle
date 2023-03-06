@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'world.gregs.intellij.plugins'
-version '1.2.6'
+version '1.2.7'
 
 repositories {
     mavenCentral()
@@ -31,13 +31,13 @@ processResources {
 
 intellij {
     updateSinceUntilBuild = false
-    version = "2021.1"
+    version = "231.8770.65"
     type = "IC"
     plugins = ["java"]
 }
 
 patchPluginXml {
     changeNotes = """
-        Updated to support 2021.1 and future versions
+        Updated to support 2023.1
       """
 }

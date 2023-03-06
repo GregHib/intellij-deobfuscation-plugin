@@ -137,7 +137,7 @@ class PointlessBitwiseComparatorInspection : BaseInspection() {
         }
 
         private fun isHex(expression: PsiExpression?): Boolean {
-            return expression != null && (expression.type == PsiType.INT && expression.text == "0xffffffff" || expression.type == PsiType.LONG && expression.text == "0xffffffffffffffffL")
+            return expression != null && (expression.type == PsiTypes.intType() && expression.text == "0xffffffff" || expression.type == PsiTypes.longType() && expression.text == "0xffffffffffffffffL")
         }
 
         private fun isBitwiseOperator(express: PsiExpression?): Boolean {
